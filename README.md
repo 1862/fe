@@ -4,6 +4,7 @@
 
 - HTML
   - 语义化
+  - WebSocket
 - CSS
 - JavaScript
 - 移动Web
