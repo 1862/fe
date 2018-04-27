@@ -3,9 +3,13 @@
 ##	知识结构
 
 - HTML
-  - 语义化
   - WebSocket
+  - meta
+  - 语义化
 - CSS
+  - 布局 (null)
+  - 盒模型 (TODO)
+  - 文本样式
 - JavaScript
 - 移动Web
 - 库/框架
