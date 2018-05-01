@@ -7,7 +7,10 @@
   - meta
   - 语义化
 - CSS
-  - 布局 (TODO)
+  - Tips
+  - 布局
+  - 层叠和继承
+  - 浮动和定位
   - 盒模型
   - 文本样式
 - JavaScript
