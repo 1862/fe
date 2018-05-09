@@ -16,7 +16,8 @@
   - 工程化
   - Tips
 - JavaScript
-  - 变量与类型(TODO)
+  - 变量与类型
+  - 函数
 - 移动Web
 - 库/框架
   - Vue
