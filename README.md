@@ -18,6 +18,7 @@
 - JavaScript
   - 变量与类型
   - 函数
+  - DOM&BOM
 - 移动Web
 - 库/框架
   - Vue

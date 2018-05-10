@@ -89,6 +89,9 @@
 
 > 元素在 HTML 中不存在, 在 CSS 中虚拟出来
 
+- ::before
+- ::after
+
 - ::first-line
   - 匹配第一行
 - ::first-letter
