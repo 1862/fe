@@ -64,6 +64,13 @@
 
   - Canvas
 
+    - 用途
+
+      - 绘制图形
+      - 处理图片 (必须是同域)
+      - 高性能动画
+      - 2D 游戏
+
     - 为了获得这个接口的对象, 需要在 `<canvas>` 上调用 [`getContext()`](https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLCanvasElement/getContext) ,  并提供一个 "2d" 的参数 
 
       ```
