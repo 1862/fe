@@ -18,8 +18,10 @@
 - JavaScript
   - 变量与类型
   - 函数
-  - DOM&BOM
+  - DOM & BOM
   - 动画
+  - 设计模式 (TODO)
+  - EventLoop机制
 - 移动Web
 - 库/框架
   - Vue
