@@ -44,7 +44,7 @@
   ```
   setTimeout(function(){console.log(1);}, 0);
   console.log(2);
-
+  
   //2 1
   ```
 
@@ -65,3 +65,68 @@
   - 区别
     - 多个process.nextTick语句总是在当前"执行栈"一次执行完 
     - 多个setImmediate可能则需要多次loop才能执行完 (setImmediate总是将事件注册到下一轮Event Loop)
+
+- 例子
+
+  ```javascript
+  console.log('1');
+  
+  setTimeout(function() {
+      console.log('2');
+      process.nextTick(function() {
+          console.log('3');
+      })
+      new Promise(function(resolve) {
+          console.log('4');
+          resolve();
+      }).then(function() {
+          console.log('5')
+      })
+  })
+  process.nextTick(function() {
+      console.log('6');
+  })
+  new Promise(function(resolve) {
+      console.log('7');
+      resolve();
+  }).then(function() {
+      console.log('8')
+  })
+  
+  setTimeout(function() {
+      console.log('9');
+      process.nextTick(function() {
+          console.log('10');
+      })
+      new Promise(function(resolve) {
+          console.log('11');
+          resolve();
+      }).then(function() {
+          console.log('12')
+      })
+  })
+  ```
+
+  分析：
+
+  1. 首先整段scripts作为宏任务进入第一次事件循环，执行`console.log('1')`。
+  2. 遇到`setTimeout`，将其回调函数注册后分发到`Event Queue`（宏任务），等待下一次事件循环取用。
+  3. 遇到微任务`process.nextTick`，将其放入第一次事件的微任务队列。
+  4. 遇到`promise`，直接执行`console.log('7')`，`.then()`回调作为微任务被放入微任务队列。
+  5. 又遇到`setTimeout`，不管，将其回调函数注册后分发到`Event Queue`（宏任务），等待取用，注意这时候事件队列`Event Queue`已有两个宏任务。
+  6. 第一次事件循环的宏任务执行完毕，开始执行微任务列表，依次执行`console.log('6')`、`console.log('8')`，微任务执行完毕，第一次事件循环结束，所以第一次事件循环执行过程：`'1'->'7'->'6'->'8'`。
+  7. 进程栈为空，开始从事件队列拉取任务，首先取出来第一个任务，作为宏任务进入第二次事件循环。
+  8. 先遇到`console.log('2')`，直接执行。
+  9. 接着遇到微任务`process.nextTick`，将其放入第二次事件的微任务队列。
+  10. 遇到`promise`，直接执行`console.log('4')`，`.then()`回调作为微任务被放入微任务队列。
+  11. 第二次循环宏任务执行完毕，开始执行微任务队列任务，依次执行`console.log('3')`、`console.log('5')`，微任务执行完毕，第二次事件循环结束，所以第二次事件循环执行过程：`'2'->'4'->'3'->'5'`。
+  12. 进程栈为空，继续从事件队列拉取任务，取出下一个任务，作为宏任务进入第三次事件循环。
+  13. 先遇到`console.log('9')`，直接执行。
+  14. 接着遇到微任务`process.nextTick`，将其放入第三次事件的微任务队列。
+  15. 遇到`promise`，直接执行`console.log('11')`，`.then()`回调作为微任务被放入微任务队列。
+  16. 第三次循环宏任务执行完毕，开始执行微任务队列任务，依次执行`console.log('10')`、`console.log('12')`，微任务执行完毕，第二次事件循环结束，所以第二次事件循环执行过程：`'9'->'11'->'10'->'12'`。
+  17. 整个事件循环结束。
+
+## 参考
+
+- [Li's BLOG](https://liyang0207.github.io/2018/07/08/JavaScript%E4%B8%AD%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/)
